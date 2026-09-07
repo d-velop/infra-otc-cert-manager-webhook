@@ -44,7 +44,7 @@ jobs:
         with:
           version: v1.6.1
           charts_dir: deploy
-          # config: 
+          config: cr.yaml
           # charts_repo_url: https://<owner>.github.io/<project>
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
