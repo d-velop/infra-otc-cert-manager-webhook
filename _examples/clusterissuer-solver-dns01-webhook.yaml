@@ -18,7 +18,7 @@ spec:
       - dns01:
           webhook:
             # See main.go > GroupName. github.com/hpi-schul-cloud/infra-otc-cert-manager-webhook
-            groupName: otc.acme.d-velop.de
+            groupName: infra-otc-cert-manager-webhook.otc.ddp.d-velop.de
             # See solver.go > Name.
             solverName: otcdns
             # The following config is given to the webhook in the Present and CleanUp methods as "c.Config" in json format.

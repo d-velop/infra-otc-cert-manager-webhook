@@ -21,7 +21,7 @@ The following table lists the configurable parameters of the infra-otc-cert-mana
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `groupName` | The groupName  is used to identify your company or business unit that created this webhook. For example, this may be "acme.mycompany.com". This name will need to be referenced in each Issuer's `webhook` stanza to inform cert-manager of where to send ChallengePayload resources in order to solve the DNS01 challenge. This group name should be **unique**, hence using your own company's domain here is recommended. | `otc.acme.d-velop.de` |
+| `groupName` | The groupName  is used to identify your company or business unit that created this webhook. For example, this may be "acme.mycompany.com". This name will need to be referenced in each Issuer's `webhook` stanza to inform cert-manager of where to send ChallengePayload resources in order to solve the DNS01 challenge. This group name should be **unique**, hence using your own company's domain here is recommended. | `infra-otc-cert-manager-webhook.otc.ddp.d-velop.de` |
 | `credentialsSecretRef` | The name of secret where the credentials to access the OTCDNS are stored. | `otcdns-credentials` |
 | `certManager.namespace` | Namespace where cert-manager is deployed to. | `cert-manager` |
 | `certManager.serviceAccountName` | Service account of cert-manager installation. | `cert-manager` |
@@ -116,7 +116,7 @@ spec:
     solvers:
       - dns01:
           webhook:
-            groupName: otc.acme.d-velop.de
+            groupName: infra-otc-cert-manager-webhook.otc.ddp.d-velop.de
             solverName: otcdns
             config:
               authURL: "https://iam.eu-de.otc.t-systems.com:443/v3"

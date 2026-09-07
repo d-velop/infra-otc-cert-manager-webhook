@@ -15,7 +15,7 @@ infra-otc-cert-manager-webhook.hpi-schul-cloud.github.com
 to
 
 ```
-otc.acme.d-velop.de
+infra-otc-cert-manager-webhook.otc.ddp.d-velop.de
 ```
 
 `groupName` is the routing label cert-manager uses to find this webhook. It
@@ -34,10 +34,12 @@ issued, only future issuance/renewal.
 **Steps, in order:**
 
 1. Upgrade the Helm release with the new chart (new default `groupName:
-   otc.acme.d-velop.de`). The webhook pod restarts and starts advertising
-   itself under the new group name via its `APIService`.
+   infra-otc-cert-manager-webhook.otc.ddp.d-velop.de`). The webhook pod
+   restarts and starts advertising itself under the new group name via its
+   `APIService`.
 2. Update `webhook.groupName` in **every** `ClusterIssuer`/`Issuer` that
-   references this webhook, in every cluster, to `otc.acme.d-velop.de`.
+   references this webhook, in every cluster, to
+   `infra-otc-cert-manager-webhook.otc.ddp.d-velop.de`.
    See `_examples/clusterissuer-solver-dns01-webhook.yaml` and
    `_examples/clusterissuer-staging-solver-dns01-webhook.yaml` for the
    updated examples.

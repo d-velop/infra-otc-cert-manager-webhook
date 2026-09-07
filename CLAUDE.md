@@ -47,6 +47,6 @@ Key behaviors worth knowing before touching `client.go`/`solver.go`:
 
 ### Deployment
 
-Helm chart lives in `deploy/infra-otc-cert-manager-webhook/`. It installs the webhook, an `APIService` for the cert-manager webhook API group, and RBAC/PKI (self-signed cert via `templates/pki.yaml`) needed for cert-manager to call it. `groupName` in the chart must match `GroupName` (env var `GROUP_NAME`, default `otc.acme.d-velop.de`) used when registering the solver in `main.go`, and must also match the `groupName` referenced in each `ClusterIssuer`/`Issuer`'s `webhook` stanza. See `_examples/` for a full worked example (Secret, ClusterIssuer, Certificate).
+Helm chart lives in `deploy/infra-otc-cert-manager-webhook/`. It installs the webhook, an `APIService` for the cert-manager webhook API group, and RBAC/PKI (self-signed cert via `templates/pki.yaml`) needed for cert-manager to call it. `groupName` in the chart must match `GroupName` (env var `GROUP_NAME`, default `infra-otc-cert-manager-webhook.otc.ddp.d-velop.de`) used when registering the solver in `main.go`, and must also match the `groupName` referenced in each `ClusterIssuer`/`Issuer`'s `webhook` stanza. See `_examples/` for a full worked example (Secret, ClusterIssuer, Certificate).
 
 The Docker image (`Dockerfile`) is a static, CGO-disabled build run as a non-root user (uid 10000/gid 10001), matching the chart's default `properties.runAsUser`/`runAsGroup`/`fsGroup`.
