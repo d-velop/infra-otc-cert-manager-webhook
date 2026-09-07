@@ -1,7 +1,5 @@
-//
 // This part of the otcdns package offers a client that provides the ability to create and cleanup the needed TXT records in the OTC DNS.
 // The methods are implemented in a way that they are most useful to build a solver. This is not a generic library.
-//
 package otcdns
 
 import (
@@ -19,9 +17,7 @@ const (
 	acmeChallengePrefix  string = "_acme-challenge."
 )
 
-//
 // The DNS client we use to trigger our DNS actions.
-//
 type OtcDnsClient struct {
 	Sc *otc.ServiceClient
 
@@ -31,10 +27,8 @@ type OtcDnsClient struct {
 	Subdomain string
 }
 
-//
 // Creates a new DNSv2 ServiceClient.
 // See also gophertelekomcloud/acceptance/clients/clients.go
-//
 func NewDNSV2ClientWithAuth(authOpts otc.AuthOptionsProvider, endpointOpts otc.EndpointOpts) (*OtcDnsClient, error) {
 
 	providerClient, err := getProviderClientWithAccessKeyAuth(authOpts)
@@ -50,10 +44,8 @@ func NewDNSV2ClientWithAuth(authOpts otc.AuthOptionsProvider, endpointOpts otc.E
 	return &OtcDnsClient{Sc: serviceClient}, nil
 }
 
-//
 // Creates a new DNSv2 ServiceClient.
 // See also gophertelekomcloud/acceptance/clients/clients.go
-//
 func NewDNSV2Client() (*OtcDnsClient, error) {
 	cloudsConfig, err := getCloud()
 	if err != nil {
@@ -80,11 +72,9 @@ func NewDNSV2Client() (*OtcDnsClient, error) {
 // Zones
 // ===========================================================================
 
-//
 // Retrieves a Zone data structure by its name.
 // https://pkg.go.dev/github.com/opentelekomcloud/gophertelekomcloud@v0.3.2/openstack/dns/v2/zones
 // github.com/opentelekomcloud/gophertelekomcloud/openstack/dns/v2/zones
-//
 func (dnsClient *OtcDnsClient) GetHostedZone(zoneName string) (*zones.Zone, error) {
 
 	listOpts := zones.ListOpts{
@@ -118,11 +108,9 @@ func (dnsClient *OtcDnsClient) GetHostedZone(zoneName string) (*zones.Zone, erro
 // RecordSets
 // ===========================================================================
 
-//
 // Creates a new TXT recordset for the ACME challenge and sets the given challengeValue as TXT record.
 // https://pkg.go.dev/github.com/opentelekomcloud/gophertelekomcloud@v0.3.2/openstack/dns/v2/recordsets
 // github.com/opentelekomcloud/gophertelekomcloud/openstack/dns/v2/recordsets
-//
 func (dnsClient *OtcDnsClient) NewTxtRecordSet(zone *zones.Zone, challengeValue string) (*recordsets.RecordSet, error) {
 	dnsName := dnsClient.getDnsName(zone.Name)
 	createOpts := recordsets.CreateOpts{
@@ -141,11 +129,9 @@ func (dnsClient *OtcDnsClient) NewTxtRecordSet(zone *zones.Zone, challengeValue 
 	return pCreatedRecordset, nil
 }
 
-//
 // Reads the TXT recordset created for the ACME challenge.
 // Valid results are 1 or 0 recordsets.
 // Error if query is not successful or more than 1 result.
-//
 func (dnsClient *OtcDnsClient) GetTxtRecordSet(zone *zones.Zone) (*recordsets.RecordSet, error) {
 	dnsName := dnsClient.getDnsName(zone.Name)
 	listOpts := recordsets.ListOpts{
@@ -180,9 +166,7 @@ func (dnsClient *OtcDnsClient) GetTxtRecordSet(zone *zones.Zone) (*recordsets.Re
 	}
 }
 
-//
 // Tests, if a TXT recordset exists for the ACME challenge.
-//
 func (dnsClient *OtcDnsClient) HasTxtRecordSet(zone *zones.Zone) (bool, error) {
 	dnsName := dnsClient.getDnsName(zone.Name)
 	listOpts := recordsets.ListOpts{
@@ -217,10 +201,8 @@ func (dnsClient *OtcDnsClient) HasTxtRecordSet(zone *zones.Zone) (bool, error) {
 	}
 }
 
-//
 // Deletes the given recordset. The intention is that the given zone and recordset are the ones
 // created for the ACME challenge.
-//
 func (dnsClient *OtcDnsClient) DeleteRecordSet(zone *zones.Zone, recordset *recordsets.RecordSet) error {
 	err := recordsets.Delete(dnsClient.Sc, zone.ID, recordset.ID).ExtractErr()
 	if err != nil {
@@ -234,9 +216,7 @@ func (dnsClient *OtcDnsClient) DeleteRecordSet(zone *zones.Zone, recordset *reco
 // Records in the Recordsets
 // ===========================================================================
 
-//
 // Tests, if the given challengeValue exists in the TXT records of the recordset.
-//
 func (dnsClient *OtcDnsClient) HasTxtRecordValue(zone *zones.Zone, challengeValue string) (bool, *recordsets.RecordSet, error) {
 	recordSet, err := dnsClient.GetTxtRecordSet(zone)
 	if err != nil {
@@ -263,12 +243,10 @@ func (dnsClient *OtcDnsClient) HasTxtRecordValue(zone *zones.Zone, challengeValu
 	}
 }
 
-//
 // Updates the given recordset with the set of TXT records for the ACME challenge.
 // This allows you to add or remove TXT value records.
 //
 // The challengeValues must have at least one entry. The OTC API has a bug. When we send an empty array the values are not deleted as expected.
-//
 func (dnsClient *OtcDnsClient) UpdateTxtRecordValues(zone *zones.Zone, recordset *recordsets.RecordSet, challengeValues []string) (*recordsets.RecordSet, error) {
 	if len(challengeValues) == 0 {
 		return nil, fmt.Errorf("update TXT records failed. The challengeValue records must have at least one entry")
@@ -286,13 +264,12 @@ func (dnsClient *OtcDnsClient) UpdateTxtRecordValues(zone *zones.Zone, recordset
 	return pUpdatedRecordSet, nil
 }
 
-//
 // Deletes the given TXT value from the records for the ACME challenge.
 //
 // challengeValue: The value that shall be deleted.
 // deleteRecordsetIfEmpty: The OTC API does not allow to delete the last TXT value.
-//     If this is set to true, the whole recordset is deleted, when there value to delete is the last one.
 //
+//	If this is set to true, the whole recordset is deleted, when there value to delete is the last one.
 func (dnsClient *OtcDnsClient) DeleteTxtRecordValue(zone *zones.Zone, challengeValue string, deleteRecordsetIfEmpty bool) (*recordsets.RecordSet, error) {
 	challengeValueExists, existingRecordset, err := dnsClient.HasTxtRecordValue(zone, challengeValue)
 	if err != nil {
@@ -340,9 +317,7 @@ func (dnsClient *OtcDnsClient) DeleteTxtRecordValue(zone *zones.Zone, challengeV
 	}
 }
 
-//
 // Ensures that a valid subdomain part is set.
-//
 func (dnsClient *OtcDnsClient) getDnsName(zoneName string) string {
 	if dnsClient.Subdomain == "" {
 		dnsName := acmeChallengePrefix + zoneName

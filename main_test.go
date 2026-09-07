@@ -6,7 +6,7 @@ import (
 
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook"
 	dns "github.com/cert-manager/cert-manager/test/acme"
-	"github.com/hpi-schul-cloud/infra-otc-cert-manager-webhook/otcdns"
+	"github.com/d-velop/infra-otc-cert-manager-webhook/otcdns"
 	"k8s.io/klog"
 )
 

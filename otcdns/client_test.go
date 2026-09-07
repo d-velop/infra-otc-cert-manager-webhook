@@ -7,7 +7,6 @@
 // VSCode users: Add { ... "go.testFlags": ["-v"] ... } to your settings.json to view log output for non failing tests.
 //
 // Be aware that some DNS operations may have a delay.
-//
 package otcdns
 
 import (
@@ -31,9 +30,7 @@ const (
 	sleepTime     = 2 * time.Second
 )
 
-//
 // Allows to overwrite the default value with a custom value.
-//
 func getTestZone() string {
 	var testZone string = "hpi-schul-cloud.dev."
 	if os.Getenv("TEST_ZONE_NAME") == "" {
@@ -47,10 +44,8 @@ func getTestZone() string {
 // Client and Zones
 // ===========================================================================
 
-//
 // Tests, if we can create a otcdns client and if we can retrieve at least
 // one zone record.
-//
 func TestClientCreateWithUser(t *testing.T) {
 	t.Log("TestClientCreateWithUser start")
 
@@ -85,10 +80,8 @@ func TestClientCreateWithUser(t *testing.T) {
 	t.Log("TestClientCreateWithUser end")
 }
 
-//
 // Tests, if we can create a otcdns client and if we can retrieve at least
 // one zone record.
-//
 func TestClientCreateWithAkSk(t *testing.T) {
 	t.Log("TestClientCreateWithTokenAuth start")
 
@@ -121,13 +114,11 @@ func TestClientCreateWithAkSk(t *testing.T) {
 	t.Log("TestClientCreateWithTokenAuth end")
 }
 
-//
 // Tests, if we can create a otcdns client and if we can retrieve at least
 // one zone record.
 //
 // In this case we utilize the configuration that is given by the environment / clouds.yaml.
 // We can directly start the test.
-//
 func TestClientCreateWithCloudConfig(t *testing.T) {
 	t.Log("TestClientCreateWithZoneList start")
 
@@ -165,9 +156,6 @@ func runZoneTest(t *testing.T, client *OtcDnsClient) {
 	assert.Greater(t, len(allZones), 0, "There should be more than one zone entry for the testdomain.")
 }
 
-//
-//
-//
 func TestGetDevZone(t *testing.T) {
 	t.Log("TestGetDevZone start")
 	client, err := NewDNSV2Client()
@@ -191,11 +179,9 @@ func TestGetDevZone(t *testing.T) {
 // RecordSets 1/2
 // ===========================================================================
 
-//
 // Deletes the whole recordset.
 //
 // If needed a recordset to delete is created by the test.
-//
 func TestDeleteTxtRecordSetOnly(t *testing.T) {
 	t.Log("TestDeleteTxtRecordSetOnly start")
 	client, err := NewDNSV2Client()
@@ -225,9 +211,7 @@ func TestDeleteTxtRecordSetOnly(t *testing.T) {
 	t.Log("TestDeleteTxtRecordSetOnly end")
 }
 
-//
 // Before we start our testsuite. Check, that the test record does not exist.
-//
 func TestHasTxtRecordSetMustNotExist(t *testing.T) {
 	t.Log("TestHasTxtRecordSetMustNotExist start")
 	t.Log("It is expected that this is the first test to run and that the test record is not created yet.")
@@ -253,9 +237,7 @@ func TestHasTxtRecordSetMustNotExist(t *testing.T) {
 	t.Log("TestHasTxtRecordSetMustNotExist end")
 }
 
-//
 // With this test we create our test record, which will be queried and manipulated in the following tests.
-//
 func TestNewTxtRecordSet(t *testing.T) {
 	t.Log("TestNewTxtRecordSet start")
 	client, err := NewDNSV2Client()
@@ -280,9 +262,7 @@ func TestNewTxtRecordSet(t *testing.T) {
 	t.Log("TestNewTxtRecordSet end")
 }
 
-//
 // Query the test record, created in the TestNewTxtRecordSet test.
-//
 func TestGetTxtRecordSet(t *testing.T) {
 	t.Log("TestGetTxtRecordSet start")
 	client, err := NewDNSV2Client()
@@ -311,9 +291,7 @@ func TestGetTxtRecordSet(t *testing.T) {
 	t.Log("TestGetTxtRecordSet end")
 }
 
-//
 // Exists test for the test record, created in the TestNewTxtRecordSet test.
-//
 func TestHasTxtRecordSet(t *testing.T) {
 	t.Log("TestHasTxtRecordSet start")
 	client, err := NewDNSV2Client()
@@ -341,10 +319,8 @@ func TestHasTxtRecordSet(t *testing.T) {
 // Records in the Recordsets
 // ===========================================================================
 
-//
 // Appends a value record to the already existing one.
 // After this we have a TXT entry with two value records.
-//
 func TestUpdateTxtRecordSetAddValue(t *testing.T) {
 	t.Log("TestUpdateTxtRecordSetAddValue start")
 	client, err := NewDNSV2Client()
@@ -378,9 +354,6 @@ func TestUpdateTxtRecordSetAddValue(t *testing.T) {
 	t.Log("TestUpdateTxtRecordSetAddValue end")
 }
 
-//
-//
-//
 func TestDeleteTxtRecordValue(t *testing.T) {
 	t.Log("TestDeleteTxtRecordValue start")
 
@@ -420,9 +393,6 @@ func TestDeleteTxtRecordValue(t *testing.T) {
 	t.Log("TestDeleteTxtRecordValue end")
 }
 
-//
-//
-//
 func TestDeleteTxtRecordValueLastOne(t *testing.T) {
 	t.Log("TestDeleteTxtRecordValueLastOne start")
 	client, err := NewDNSV2Client()
@@ -481,11 +451,9 @@ func TestDeleteTxtRecordValueLastOne(t *testing.T) {
 // RecordSets 2/2
 // ===========================================================================
 
-//
 // Deletes the whole recordset.
 //
 // If needed a recordset to delete is created by the test.
-//
 func TestCreateGetDeleteTxtRecordSet(t *testing.T) {
 	t.Log("TestCreateGetDeleteTxtRecordSet start")
 	client, err := NewDNSV2Client()
