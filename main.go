@@ -11,7 +11,7 @@ import (
 var GroupName = getGroupName()
 
 func main() {
-	// infra-otc-cert-manager-webhook.hpi-schul-cloud.github.com
+	// otc.acme.d-velop.de
 	if GroupName == "" {
 		panic("GROUP_NAME must be specified")
 	}
@@ -27,7 +27,7 @@ func main() {
 }
 
 func getGroupName() string {
-	var groupName string = "infra-otc-cert-manager-webhook.hpi-schul-cloud.github.com"
+	var groupName string = "otc.acme.d-velop.de"
 	if os.Getenv("GROUP_NAME") == "" {
 		return groupName
 	} else {

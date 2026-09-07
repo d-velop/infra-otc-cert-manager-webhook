@@ -5,9 +5,11 @@ This project provides a cert-manager webhook for the [Open Telekom Cloud (OTC)](
 This webhook is available on GitHub [hpi-schul-cloud /
 infra-otc-cert-manager-webhook](https://github.com/hpi-schul-cloud/infra-otc-cert-manager-webhook). It is written in Go and uses the Go API of the OTC [gophertelekomcloud](https://github.com/opentelekomcloud/gophertelekomcloud). The gophertelekomcloud is part of the Open Telekom Cloud (T-Systems, Deutsche Telekom) project available on GitHub https://github.com/opentelekomcloud.
 
+If you're upgrading an existing installation, check [MIGRATION.md](MIGRATION.md) first — the `groupName` and image registry changed and both need action in every cluster.
+
 ## Requirements
 
-- [kubernetes](https://kubernetes.io/) >= v1.18.0
+- [kubernetes](https://kubernetes.io/) >= v1.33.0
 - [cert-manager](https://cert-manager.io/) >= 1.14.5
 - [helm](https://helm.sh/) >= v3.0.0
 
@@ -19,11 +21,11 @@ The following table lists the configurable parameters of the infra-otc-cert-mana
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `groupName` | The groupName  is used to identify your company or business unit that created this webhook. For example, this may be "acme.mycompany.com". This name will need to be referenced in each Issuer's `webhook` stanza to inform cert-manager of where to send ChallengePayload resources in order to solve the DNS01 challenge. This group name should be **unique**, hence using your own company's domain here is recommended. | `infra-otc-cert-manager-webhook.hpi-schul-cloud.github.com` |
+| `groupName` | The groupName  is used to identify your company or business unit that created this webhook. For example, this may be "acme.mycompany.com". This name will need to be referenced in each Issuer's `webhook` stanza to inform cert-manager of where to send ChallengePayload resources in order to solve the DNS01 challenge. This group name should be **unique**, hence using your own company's domain here is recommended. | `otc.acme.d-velop.de` |
 | `credentialsSecretRef` | The name of secret where the credentials to access the OTCDNS are stored. | `otcdns-credentials` |
 | `certManager.namespace` | Namespace where cert-manager is deployed to. | `cert-manager` |
 | `certManager.serviceAccountName` | Service account of cert-manager installation. | `cert-manager` |
-| `image.repository` | Image repository | `schulcloud/infra-otc-cert-manager-webhook` |
+| `image.repository` | Image repository | `ghcr.io/d-velop/infra-otc-cert-manager-webhook` |
 | `image.tag` | Image tag | `sha-6e4a13b` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `image.pullSecrets` | Image pull secrets | `[]` |
@@ -114,7 +116,7 @@ spec:
     solvers:
       - dns01:
           webhook:
-            groupName: infra-otc-cert-manager-webhook.hpi-schul-cloud.github.com
+            groupName: otc.acme.d-velop.de
             solverName: otcdns
             config:
               authURL: "https://iam.eu-de.otc.t-systems.com:443/v3"
@@ -179,7 +181,7 @@ The cert-manager will detect it and start the issuing process. See [Troubleshoot
 
 ### Requirements
 
-- [go](https://golang.org/) >= 1.22.3
+- [go](https://golang.org/) >= 1.27.1
 
 ### Configure the tests
 
